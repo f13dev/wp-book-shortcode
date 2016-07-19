@@ -53,15 +53,66 @@ function f13_book_shortcode( $atts, $content = null )
         // a required field.
         if ($isbn == '')
         {
-            $response = 'The ISB attribute is required, please enter an ISBN and try again.<br />
+            $response = 'The ISBN attribute is required, please enter an ISBN and try again.<br />
             e.g. [book isbn="anISBN"]<br />
             Please note, the ISBN field may take a valid ISBN or GTIN as found on Outpan.com.';
         }
         else
         {
-            // Attempt to generate a response
+            // Generate the book data.
+            $data = f13_get_book_data($isbn);
+
+            // Check if an error has been returned.
+            if (array_key_exists('error', $data))
+            {
+                // Alert the user that the ISBN returned an error
+                $response = 'The ISBN: ' . $isbn . ' could not be found.';
+            }
+            else
+            {
+                // Generate the response.
+                $response = f13_book_shortcode_format($data);
+            }
         }
     }
+    // Return the response
+    return $response;
+}
+
+function f13_book_shortcode_format($data)
+{
+    // Create a response
+    $response = '';
+
+    // Create a container div
+    $response .= '<div class="f13-book-container">';
+
+        // Place the title in a div
+        $response .= '<div class="f13-book-title">';
+
+            // Output the books name
+            $response .= $data['name'] . '<br />';
+
+        // Close the title div
+        $response .= '</div>';
+
+        // Output the image if it exists
+        $response .= '<img src="' . $data['images'][0] . '" />';
+
+        // For each attribute, output the key and value
+        $response .= '<ul>';
+
+            foreach($data['attributes'] as $key => $value)
+            {
+                // Create a new list item for each attribute
+                $response .= '<li><span>' . $key . ':</span> ' . $value . '</li>';
+            }
+
+        $response .= '</ul>';
+
+    // Close the container div
+    $response .= '</div>';
+
     // Return the response
     return $response;
 }
