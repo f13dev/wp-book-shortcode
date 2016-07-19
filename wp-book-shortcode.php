@@ -24,3 +24,10 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
+
+// Register the shortcode
+add_shortcode( 'book', 'f13_book_shortcode');
+// Register the CSS
+add_action( 'wp_enqueue_scripts', 'f13_book_shortcode_stylesheet');
+// Register the admin page
+add_action('admin_menu', 'f13_bs_create_menu');
