@@ -96,8 +96,12 @@ function f13_book_shortcode_format($data)
         // Close the title div
         $response .= '</div>';
 
-        // Output the image if it exists
-        $response .= '<img src="' . $data['images'][0] . '" />';
+        // Check if an image exists
+        if ($data['image'][0] != '')
+        {
+            // Output the image
+            $response .= '<img src="' . $data['images'][0] . '" />';
+        }
 
         // For each attribute, output the key and value
         $response .= '<ul>';
@@ -109,6 +113,9 @@ function f13_book_shortcode_format($data)
             }
 
         $response .= '</ul>';
+
+    // Clear the styling
+    $response .= '<br clear="both" />';
 
     // Close the container div
     $response .= '</div>';
