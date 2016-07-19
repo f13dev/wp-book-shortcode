@@ -39,6 +39,31 @@ function f13_book_shortcode( $atts, $content = null )
         'isbn' => '', // Get the ISBN attribute
     ), $atts ));
 
+    // Check if the api key is present, it it is not
+    // then allert the user.
+    if (esc_attr( get_option('f13bs_token')) == '')
+    {
+        $response = 'An Outpan API key is required to use this plugin<br />
+        please visit \'WPAdmin => Settings => F13 Book Shortcode\' for more information';
+    }
+    else
+    {
+        // Check if the ISBN attribute has been completed,
+        // if not allert the user that the ISBN attribute is
+        // a required field.
+        if ($isbn == '')
+        {
+            $response = 'The ISB attribute is required, please enter an ISBN and try again.<br />
+            e.g. [book isbn="anISBN"]<br />
+            Please note, the ISBN field may take a valid ISBN or GTIN as found on Outpan.com.';
+        }
+        else
+        {
+            // Attempt to generate a response
+        }
+    }
+    // Return the response
+    return $response;
 }
 
 function f13_book_shortcode_stylesheet()
