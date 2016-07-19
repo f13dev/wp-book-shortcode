@@ -66,6 +66,38 @@ function f13_book_shortcode( $atts, $content = null )
     return $response;
 }
 
+function f13_get_book_data($anISBN)
+{
+    // Get the API Key from the admin settings
+    $key = esc_attr( get_option('f13bs_token'));
+
+    // start curl
+    $curl = curl_init();
+
+    // Remove hyphens from the ISBN
+    $anISBN = str_replace('-', '', $anISBN);
+
+    // set the curl URL
+    $url = 'https://api.outpan.com/v2/products/' . $anISBN . '?apikey=' . $key;
+
+    // Set curl options
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_HTTPGET, true);
+
+    // Set the user agent
+    curl_setopt($curl, CURLOPT_USERAGENT, 'F13 WP Book Shortcode/1.0');
+    // Set curl to return the response, rather than print it
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    // Get the results and store the XML to results
+    $results = json_decode(curl_exec($curl), true);
+
+    // Close the curl session
+    curl_close($curl);
+
+    return $results;
+}
+
 function f13_book_shortcode_stylesheet()
 {
     wp_register_style( 'f13book-style', plugins_url('wp-book-shortcode.css', __FILE__));
